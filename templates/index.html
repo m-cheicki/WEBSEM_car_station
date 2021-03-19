@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Train station</title>
+
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+            integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+            crossorigin="" />
+
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin=""></script>
+    
+    </head>
+
+    <body>
+        <div class="left-panel">
+            <div>
+                <form action="">
+                    <input type="text" placeholder="Search..." />
+                    <span class="material-icons">search</span>
+                </form>
+            </div>
+            <ul>
+                <li></li>
+            </ul>
+        </div>
+        
+        <div id="map"></div>
+    </body>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body{
+
+        }
+
+        div.left-panel{
+            background-color: teal;
+            height: 100vh;
+            width: 20vw;
+        }
+
+        div.left-panel div{
+            background: #FFF;
+            height: 48px;
+            padding: 8px 0;
+            border: none;
+            box-shadow: 0 0 2px 0 #000;
+            margin: 0 auto;
+            border-radius: 50px;
+            width: 90%;
+        }
+
+        form{
+            display: flex;
+            justify-content: center;
+            align-items: center;  
+            height: 100%; 
+            width: 100%; 
+        }
+
+        div.left-panel div form input{
+            border: none;
+            flex-grow: 2;
+            margin: 0 0 0 16px;
+            height: 100%;
+            border-radius: 50px;
+        }
+
+        div.left-panel div form span{
+            margin: 0 16px 0 4px;
+        }
+
+        #map {
+            height: 100vh;
+            width: 80vw;
+            position: fixed;
+            right:0; 
+            top: 0; 
+        }
+
+    </style>
+    <script>
+        var mymap = L.map('map').setView([48.856614, 	2.3522219], 10);
+
+        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            maxZoom: 18,
+            id: 'mapbox/streets-v11',
+            tileSize: 512,
+            zoomOffset: -1,
+            accessToken: 'pk.eyJ1IjoibWNoZWlja2kiLCJhIjoiY2ttZ3VlYXFyMDB5eTJ4bXF3bmp6Zng2cyJ9.ZukfPhGAAp8xIx1Xk55VPg'
+        }).addTo(mymap);
+    </script>
+</html>
