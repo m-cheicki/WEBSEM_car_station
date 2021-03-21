@@ -14,15 +14,22 @@
         <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
             integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
             crossorigin=""></script>
+
+        <link rel="stylesheet" href="./static/style.css">
+        
+
     
     </head>
 
     <body>
         <div class="left-panel">
+            <img class="logo" src="static/logo.png" alt="">
             <div>
                 <form action="">
                     <input type="text" placeholder="Search..." />
-                    <span class="material-icons">search</span>
+                    <button type="submit">
+                        <span class="material-icons">search</span>
+                    </button>
                 </form>
             </div>
             <ul>
@@ -32,64 +39,9 @@
         
         <div id="map"></div>
     </body>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body{
 
-        }
-
-        div.left-panel{
-            background-color: teal;
-            height: 100vh;
-            width: 20vw;
-        }
-
-        div.left-panel div{
-            background: #FFF;
-            height: 48px;
-            padding: 8px 0;
-            border: none;
-            box-shadow: 0 0 2px 0 #000;
-            margin: 0 auto;
-            border-radius: 50px;
-            width: 90%;
-        }
-
-        form{
-            display: flex;
-            justify-content: center;
-            align-items: center;  
-            height: 100%; 
-            width: 100%; 
-        }
-
-        div.left-panel div form input{
-            border: none;
-            flex-grow: 2;
-            margin: 0 0 0 16px;
-            height: 100%;
-            border-radius: 50px;
-        }
-
-        div.left-panel div form span{
-            margin: 0 16px 0 4px;
-        }
-
-        #map {
-            height: 100vh;
-            width: 80vw;
-            position: fixed;
-            right:0; 
-            top: 0; 
-        }
-
-    </style>
     <script>
-        var mymap = L.map('map').setView([48.856614, 	2.3522219], 10);
+        var mymap = L.map('map').setView([48.856614, 2.3522219], 11);
 
         L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
             attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
