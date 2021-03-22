@@ -23,24 +23,50 @@
 
     <body>
         <div class="left-panel">
-            <img class="logo" src="static/logo.png" alt="">
-            <div>
-                <form action="">
-                    <input type="text" placeholder="Search..." />
-                    <button type="submit">
-                        <span class="material-icons">search</span>
-                    </button>
-                </form>
+            <div class="logo">
+                LOGO
             </div>
-            <ul>
-                <li></li>
-            </ul>
+            <div id="results">
+                <div>
+                    <div class="card"></div>
+                    <div class="card"></div>
+                    <div class="card"></div>
+                    <div class="card"></div>
+                    <div class="card"></div>
+                    <div class="card"></div>
+                    <div class="card"></div>
+                    <div class="card"></div>
+                    <div class="card"></div>
+                    <div class="card"></div>
+                </div>
+            </div>
         </div>
-        
-        <div id="map"></div>
+        <div class="right-panel">
+            <form action="" method="get">
+                <div class="search-bar">
+                    <button type="submit"><span class="material-icons">search</span></button>
+                    <input type="text" name="search" id="search" value="" placeholder="Enter a zipcode"/>
+                </div>
+                
+                <div class="filters">
+                    <div>Filters : </div>
+                    <div>
+                        <input type="checkbox" name="paying" id="paying" checked>
+                        <label for="paying">Paying</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="free" id="free" checked>
+                        <label for="free">Free</label>
+                    </div>
+                </div>
+                
+            </form>
+            <div id="map"></div>
+        </div>
     </body>
 
     <script>
+    
         var mymap = L.map('map').setView([48.856614, 2.3522219], 11);
 
         L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
