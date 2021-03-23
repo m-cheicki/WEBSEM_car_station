@@ -1,3 +1,13 @@
+:root {
+	--dark-gray: ##202225;
+	--light-gray: #36393f;
+	--dark: #0c2233;
+	--light: #f3f3f3;
+	--blue: #4285f4;
+	--light-blue: #0a91ab;
+	--yellow: #fbbc05;
+}
+
 * {
 	margin: 0;
 	padding: 0;
@@ -9,6 +19,9 @@ body {
 	height: 100vh;
 	overflow: hidden;
 	display: flex;
+	background-color: var(--dark);
+	color: var(--light);
+	font-family: sans-serif;
 }
 
 div.left-panel {
@@ -63,7 +76,7 @@ form {
 	align-items: center;
 	margin: 1em 16px 0.5em;
 	padding: 0px 8px;
-	border: solid 1px;
+	box-shadow: 0 0 2px 0 var(--light);
 	border-radius: 50px;
 }
 
@@ -71,6 +84,7 @@ button {
 	background: none;
 	border: none;
 	padding: 4px 0 0;
+	color: var(--light);
 }
 
 .search-bar input[type="text"] {
@@ -78,11 +92,27 @@ button {
 	padding: 0.5em 1em;
 	height: 100%;
 	border: none;
+	background-color: var(--dark);
+	color: var(--dark);
+	letter-spacing: 1px;
+}
+
+.search-bar:focus-within {
+	box-shadow: 0 0 8px 0px var(--blue);
+}
+
+.search-bar:focus-within,
+.search-bar:focus-within button,
+input[type="text"]:focus {
+	background-color: var(--light);
+	color: var(--dark);
+	border: none;
+	outline: none;
 }
 
 .filters {
 	display: flex;
-	padding: 0 1.2em;
+	padding: 0.7em 1.2em 0.8em;
 }
 
 .filters div {
