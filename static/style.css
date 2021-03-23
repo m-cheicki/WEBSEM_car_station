@@ -4,7 +4,7 @@
 	--dark: #0c2233;
 	--light: #f3f3f3;
 	--blue: #4285f4;
-	--light-blue: #0a91ab;
+	--light-blue: #0a91ab40;
 	--yellow: #fbbc05;
 }
 
@@ -49,13 +49,48 @@ div.left-panel {
 	overflow-y: auto;
 }
 
+#results > div::-webkit-scrollbar {
+	width: 5px;
+	height: 8px;
+	background-color: var(--light-blue);
+	border-radius: 4px;
+}
+#results > div::-webkit-scrollbar-thumb {
+	background: var(--blue);
+	border-radius: 4px;
+}
+
 .card {
 	min-height: 150px;
 	width: 90%;
-	padding: 4px 8px;
+	padding: 1.5em;
 	margin: 1em auto;
-	background-color: antiquewhite;
-	border-radius: 16px;
+
+	background: rgba(255, 255, 255, 0.15);
+	box-shadow: 0 4px 16px 0 var(--light-blue);
+	backdrop-filter: blur(4px);
+	-webkit-backdrop-filter: blur(4px);
+	border-radius: 10px;
+	border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.card:hover {
+	background: rgba(255, 255, 255, 0.2);
+}
+
+.card strong {
+	color: var(--yellow);
+	text-transform: uppercase;
+}
+
+.card p {
+	color: var(--light);
+	padding: 8px 0 0;
+}
+
+.card p:nth-last-child(-n + 2) {
+	color: var(--blue);
+	font-size: 12px;
 }
 
 div.right-panel {
