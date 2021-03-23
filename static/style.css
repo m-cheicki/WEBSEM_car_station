@@ -24,6 +24,10 @@ body {
 	font-family: sans-serif;
 }
 
+/******************************************
+				LEFT PANEL 
+ ******************************************/
+
 div.left-panel {
 	flex-grow: 2;
 	display: flex;
@@ -34,6 +38,10 @@ div.left-panel {
 	height: 96px;
 }
 
+/******************************************
+			RESULT PANEL 
+ ******************************************/
+
 #results {
 	width: 100%;
 	height: calc(100% - 96px);
@@ -41,6 +49,10 @@ div.left-panel {
 	align-items: center;
 	justify-content: center;
 }
+
+/******************************************
+			RESULT CONTAINER 
+ ******************************************/
 
 #results > div {
 	height: calc(80vh - 96px);
@@ -60,6 +72,9 @@ div.left-panel {
 	border-radius: 4px;
 }
 
+/******************************************
+			RESULT CARDS 
+ ******************************************/
 .card {
 	min-height: 150px;
 	width: 90%;
@@ -93,9 +108,17 @@ div.left-panel {
 	font-size: 12px;
 }
 
+/******************************************
+				RIGHT PANEL 
+ ******************************************/
+
 div.right-panel {
 	flex-grow: 5;
 }
+
+/******************************************
+				SEARCH FORM 
+ ******************************************/
 
 form {
 	height: 96px;
@@ -104,6 +127,9 @@ form {
 	justify-content: center;
 }
 
+/******************************************
+				SEARCH BAR 
+ ******************************************/
 .search-bar {
 	width: calc(100% - 32px);
 	display: flex;
@@ -145,6 +171,9 @@ input[type="text"]:focus {
 	outline: none;
 }
 
+/******************************************
+			SEARCH FILTERS 
+ ******************************************/
 .filters {
 	display: flex;
 	padding: 0.7em 1.2em 0.8em;
@@ -158,6 +187,9 @@ input[type="text"]:focus {
 	padding: 0 1em 0 0.2em;
 }
 
+/******************************************
+					MAPS
+ ******************************************/
 #map {
 	height: calc(100% - 96px);
 	width: 100%;
