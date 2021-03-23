@@ -36,6 +36,12 @@ div.left-panel {
 
 .logo {
 	height: 96px;
+	margin: auto;
+}
+
+.logo img {
+	height: 100%;
+	padding: 8px;
 }
 
 /******************************************
