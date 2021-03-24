@@ -41,7 +41,7 @@ context = '''"@context" : {
     "geometry" : null,
     "record_timestamp": null,
     "facet_groups" : null
-  },'''
+},'''
 
 r = requests.get("https://public.opendatasoft.com/api/records/1.0/search/?dataset=fichier-consolide-des-bornes-de-recharge-pour-vehicules-electriques-irve&q=&rows=10000&facet=n_enseigne&facet=nbre_pdc&facet=puiss_max&facet=accessibilite&facet=nom_epci&facet=commune&facet=nom_reg&facet=nom_dep")
 j = r.text
@@ -52,11 +52,13 @@ j = "{"+context+j[1:len(j)]
 # Create graph from JSON-LD
 g = Graph().parse(data=j, format="json-ld")
 
+
+query = """SELECT ?name WHERE {
+            ?a <http://www.owl-ontologies.com/stations-velos.owl#station> ?id .
+            ?id <http://www.owl-ontologies.com/stations-velos.owl#@nest> ?stationID .
+            ?stationID <http://www.owl-ontologies.com/stations-velos.owl#name> ?name .
+        }"""
+
 # Querying Graph
-for _ in g.query("""SELECT ?id ?add
-    WHERE {
-        ?a <http://www.owl-ontologies.com/stations-velos.owl#station> ?id .
-        ?id <http://www.owl-ontologies.com/stations-velos.owl#@nest> ?vraiID .
-        ?vraiID <http://www.owl-ontologies.com/stations-velos.owl#zipcode> ?add .
-    }"""):
-    print(_.add.toPython())
+for _ in g.query(query):
+    print(_.name.toPython())

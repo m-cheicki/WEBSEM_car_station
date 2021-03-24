@@ -29,52 +29,27 @@
             </div>
             <div id="results">
                 <div>
-                    <div class="card">
-                        <strong>VILLE DE GARCHE</strong>
-                        <p>Adresse ....................</p>
-                        <p>00000 <span>CITY</span></p>
-                        <p>Number of plugs : <span>00</span></p>
-                        <p>Payant</p>
-                    </div>
-                    <div class="card">
-                        <strong>VILLE DE GARCHE</strong>
-                        <p>Adresse ....................</p>
-                        <p>00000 <span>CITY</span></p>
-                        <p>Number of plugs : <span>00</span></p>
-                        <p>Payant</p>
-                    </div>
-                    <div class="card">
-                        <strong>VILLE DE GARCHE</strong>
-                        <p>Adresse ....................</p>
-                        <p>00000 <span>CITY</span></p>
-                        <p>Number of plugs : <span>00</span></p>
-                        <p>Payant</p>
-                    </div>
-                    <div class="card">
-                        <strong>VILLE DE GARCHE</strong>
-                        <p>Adresse ....................</p>
-                        <p>00000 <span>CITY</span></p>
-                        <p>Number of plugs : <span>00</span></p>
-                        <p>Payant</p>
-                    </div>
-                    <div class="card">
-                        <strong>VILLE DE GARCHE</strong>
-                        <p>Adresse ....................</p>
-                        <p>00000 <span>CITY</span></p>
-                        <p>Number of plugs : <span>00</span></p>
-                        <p>Payant</p>
-                    </div>
+
+                    {% for zipcode in zipcodes %}
+                        <div class="card">
+                            <strong>VILLE DE GARCHE</strong>
+                            <p>Adresse ....................</p>
+                            <p>{{zipcode}} <span>CITY</span></p>
+                            <p>Number of plugs : <span>00</span></p>
+                            <p>Payant</p>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
         <div class="right-panel">
-            <form action="" method="get">
+            <form action="" method="POST">
                 <div class="search-bar">
                     <button type="submit"><span class="material-icons">search</span></button>
-                    <input type="text" list="zipcodes" name="search" id="search" value="" placeholder="Enter a zipcode"/>
+                    <input type="text" list="zipcodes" name="search" id="search" value="" minlength='5' maxlength='5' placeholder="Enter a zipcode"/>
                     <datalist id="zipcodes">
                         <template id="resultstemplate">
-                            {% for zipcode in zipcodes %}
+                            {% for zipcode in all_zipcodes %}
                                 <option value={{zipcode}}>
                             {% endfor %}
                         </template>

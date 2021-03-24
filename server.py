@@ -1,7 +1,8 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, request
 import requests
 from rdflib import Graph
 
+API_URL = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=fichier-consolide-des-bornes-de-recharge-pour-vehicules-electriques-irve&q=&rows=10000&facet=n_enseigne&facet=nbre_pdc&facet=puiss_max&facet=accessibilite&facet=nom_epci&facet=commune&facet=nom_reg&facet=nom_dep"
 
 context = '''"@context" : {
     "@vocab":"http://www.owl-ontologies.com/stations-velos.owl#",
@@ -43,9 +44,9 @@ context = '''"@context" : {
     "geometry" : null,
     "record_timestamp": null,
     "facet_groups" : null
-  },'''
+},'''
 
-r = requests.get("https://public.opendatasoft.com/api/records/1.0/search/?dataset=fichier-consolide-des-bornes-de-recharge-pour-vehicules-electriques-irve&q=&rows=10000&facet=n_enseigne&facet=nbre_pdc&facet=puiss_max&facet=accessibilite&facet=nom_epci&facet=commune&facet=nom_reg&facet=nom_dep")
+r = requests.get(API_URL)
 j = r.text
 
 # Transform JSON to JSON-LD adding context
@@ -54,26 +55,32 @@ j = "{"+context+j[1:len(j)]
 # Create graph from JSON-LD
 g = Graph().parse(data=j, format="json-ld")
 
-zipcodes = []
-
-# Querying Graph
-for _ in g.query("""SELECT ?id ?zipcode
-    WHERE {
-        ?a <http://www.owl-ontologies.com/stations-velos.owl#station> ?id .
-        ?id <http://www.owl-ontologies.com/stations-velos.owl#@nest> ?vraiID .
-        ?vraiID <http://www.owl-ontologies.com/stations-velos.owl#zipcode> ?zipcode .
-    }"""):
-
-    if _.zipcode.toPython() not in zipcodes:
-        zipcodes.append(_.zipcode.toPython())
+# Queries
+zipcode_query = """SELECT ?zipcode WHERE {
+            ?a <http://www.owl-ontologies.com/stations-velos.owl#station> ?id .
+            ?id <http://www.owl-ontologies.com/stations-velos.owl#@nest> ?stationID .
+            ?stationID <http://www.owl-ontologies.com/stations-velos.owl#zipcode> ?zipcode .
+        }"""
 
 
 app = Flask(__name__)
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html', zipcodes=zipcodes)
+    all_zipcodes = []
+    zipcodes = []
+
+    for _ in g.query(zipcode_query):
+        all_zipcodes.append(_.zipcode.toPython())
+
+    if request.method == 'POST':
+        zipcodes = [request.form['search']]
+
+    else:
+        zipcodes = all_zipcodes
+
+    return render_template('index.html', all_zipcodes=all_zipcodes, zipcodes=zipcodes)
 
 
 if __name__ == '__main__':
