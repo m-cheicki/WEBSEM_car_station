@@ -1,7 +1,5 @@
-from flask import Flask, render_template, url_for
 import requests
 from rdflib import Graph
-
 
 context = '''"@context" : {
     "@vocab":"http://www.owl-ontologies.com/stations-velos.owl#",
@@ -54,27 +52,11 @@ j = "{"+context+j[1:len(j)]
 # Create graph from JSON-LD
 g = Graph().parse(data=j, format="json-ld")
 
-zipcodes = []
-
 # Querying Graph
-for _ in g.query("""SELECT ?id ?zipcode
+for _ in g.query("""SELECT ?id ?add
     WHERE {
         ?a <http://www.owl-ontologies.com/stations-velos.owl#station> ?id .
         ?id <http://www.owl-ontologies.com/stations-velos.owl#@nest> ?vraiID .
-        ?vraiID <http://www.owl-ontologies.com/stations-velos.owl#zipcode> ?zipcode .
+        ?vraiID <http://www.owl-ontologies.com/stations-velos.owl#zipcode> ?add .
     }"""):
-
-    if _.zipcode.toPython() not in zipcodes:
-        zipcodes.append(_.zipcode.toPython())
-
-
-app = Flask(__name__)
-
-
-@app.route('/')
-def index():
-    return render_template('index.html', zipcodes=zipcodes)
-
-
-if __name__ == '__main__':
-    app.run(port="5000", debug=True)
+    print(_.add.toPython())

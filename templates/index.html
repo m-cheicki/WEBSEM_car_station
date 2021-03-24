@@ -71,7 +71,14 @@
             <form action="" method="get">
                 <div class="search-bar">
                     <button type="submit"><span class="material-icons">search</span></button>
-                    <input type="text" name="search" id="search" value="" placeholder="Enter a zipcode"/>
+                    <input type="text" list="zipcodes" name="search" id="search" value="" placeholder="Enter a zipcode"/>
+                    <datalist id="zipcodes">
+                        <template id="resultstemplate">
+                            {% for zipcode in zipcodes %}
+                                <option value={{zipcode}}>
+                            {% endfor %}
+                        </template>
+                    </datalist>
                 </div>
                 
                 <div class="filters">
@@ -93,6 +100,20 @@
 
     <script>
     
+        var search = document.querySelector('#search');
+        var results = document.querySelector('#zipcodes');
+        var templateContent = document.querySelector('#resultstemplate').content;
+
+        search.addEventListener('click', function handler(event) {
+            while (results.children.length) results.removeChild(results.firstChild);
+            var inputVal = new RegExp(search.value.trim(), 'i');
+            var set = Array.prototype.reduce.call(templateContent.cloneNode(true).children, function searchFilter(frag, item, i) {
+                if (inputVal.test(item.textContent) && frag.children.length < 5) frag.appendChild(item);
+                return frag;
+            }, document.createDocumentFragment());
+            results.appendChild(set);
+        });
+
         var mymap = L.map('map').setView([48.856614, 2.3522219], 11);
 
         L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
