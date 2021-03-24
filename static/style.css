@@ -1,5 +1,5 @@
 :root {
-	--dark-gray: ##202225;
+	--dark-gray: #202225;
 	--light-gray: #36393f;
 	--dark: #0c2233;
 	--light: #f3f3f3;
@@ -160,7 +160,7 @@ button {
 	height: 100%;
 	border: none;
 	background-color: var(--dark);
-	color: var(--dark);
+	color: var(--light);
 	letter-spacing: 1px;
 }
 
