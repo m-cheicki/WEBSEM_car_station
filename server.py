@@ -2,7 +2,7 @@ from flask import Flask, render_template, url_for, request
 import requests
 from rdflib import Graph
 
-API_URL = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=fichier-consolide-des-bornes-de-recharge-pour-vehicules-electriques-irve&q=&rows=100&facet=n_enseigne&facet=nbre_pdc&facet=puiss_max&facet=accessibilite&facet=nom_epci&facet=commune&facet=nom_reg&facet=nom_dep"
+API_URL = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=fichier-consolide-des-bornes-de-recharge-pour-vehicules-electriques-irve&q=&rows=10000&facet=n_enseigne&facet=nbre_pdc&facet=puiss_max&facet=accessibilite&facet=nom_epci&facet=commune&facet=nom_reg&facet=nom_dep"
 
 context = '''"@context" : {
     "@vocab":"http://www.owl-ontologies.com/stations-velos.owl#",
@@ -15,24 +15,27 @@ context = '''"@context" : {
     "format": null,
     "facet": null,
 
-    "id_station": "@id",
-    "n_enseigne": "name",
+    "id_pdc": "@id",
+    "n_station": "name",
     "xlongitude": "lon",
     "ylatitude": "lat",
     "code_insee": "zipcode",
     "ad_station": "address",
     "nbre_pdc": "numberPlugs",
-    "acces_recharge": "shouldPay",
+    "acces_recharge": "isPayant",
     "fields":"@nest",
     "parameters": "@nest",
     "records":{"@id":"station"}, 
+    "coordonnees": {"@container":"id"},
+    "isElectrical": "1", 
 
+    "id_station": null,
     "datasetid": null,
     "recordid": null,
     "horaires_sav": null,
     "tel_sav": null,
     "type_prise": null,
-    "n_station": null,
+    "n_enseigne": null,
     "n_amenageur": null,
     "id_pdc": null,
     "date_maj": null,
@@ -43,6 +46,7 @@ context = '''"@context" : {
     "n_operateur": null,
     "geometry" : null,
     "record_timestamp": null,
+    "source": null,
     "facet_groups" : null
 },'''
 
@@ -62,6 +66,21 @@ zipcode_query = """SELECT ?zipcode WHERE {
             ?stationID <http://www.owl-ontologies.com/stations-velos.owl#zipcode> ?zipcode .
         }"""
 
+query = """PREFIX st:<http://www.owl-ontologies.com/stations-velos.owl#>
+    SELECT ?add ?insee ?name ?payant ?lat ?lon ?numberPlugs
+    WHERE {
+        ?a st:station ?id .
+        ?id <http://www.owl-ontologies.com/stations-velos.owl#@nest> ?vraiID .
+        ?vraiID st:address ?add .
+        ?vraiID st:zipcode ?insee .
+        ?vraiID st:name ?name .
+        ?vraiID st:isPayant ?payant .
+        ?vraiID st:numberPlugs ?numberPlugs .
+        ?vraiID st:coordonnees ?lat .
+        ?vraiID st:coordonnees ?lon .
+        FILTER(?lat > ?lon)
+    }"""
+
 
 app = Flask(__name__)
 
@@ -70,9 +89,22 @@ app = Flask(__name__)
 def index():
     all_zipcodes = []
     zipcodes = []
+    data = []
 
     for _ in g.query(zipcode_query):
         all_zipcodes.append(_.zipcode.toPython())
+
+    for _ in g.query(query):
+        record = {
+            "name": _.name.toPython(),
+            "adress": _.add.toPython(),
+            "zipcode": _.insee.toPython(),
+            "paying": _.payant.toPython(),
+            "lat": _.lat.toPython(),
+            "lon": _.lon.toPython(),
+            "numberPlugs": _.numberPlugs.toPython(),
+        }
+        data.append(record)
 
     if request.method == 'POST':
         indexes = [index for index, value in enumerate(
@@ -82,7 +114,8 @@ def index():
     else:
         zipcodes = all_zipcodes
 
-    return render_template('index.html', all_zipcodes=all_zipcodes, zipcodes=zipcodes)
+    print(len(data))
+    return render_template('index.html', all_zipcodes=all_zipcodes, zipcodes=zipcodes, data=data)
 
 
 if __name__ == '__main__':

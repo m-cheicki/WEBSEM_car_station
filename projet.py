@@ -12,24 +12,27 @@ context = '''"@context" : {
     "format": null,
     "facet": null,
 
-    "id_station": "@id",
-    "n_enseigne": "name",
+    "id_pdc": "@id",
+    "n_station": "name",
     "xlongitude": "lon",
     "ylatitude": "lat",
     "code_insee": "zipcode",
     "ad_station": "address",
     "nbre_pdc": "numberPlugs",
-    "acces_recharge": "shouldPay",
+    "acces_recharge": "isPayant",
     "fields":"@nest",
     "parameters": "@nest",
     "records":{"@id":"station"}, 
+    "coordonnees": {"@container":"id"},
+    "isElectrical": "1", 
 
+    "id_station": null,
     "datasetid": null,
     "recordid": null,
     "horaires_sav": null,
     "tel_sav": null,
     "type_prise": null,
-    "n_station": null,
+    "n_enseigne": null,
     "n_amenageur": null,
     "id_pdc": null,
     "date_maj": null,
@@ -40,6 +43,7 @@ context = '''"@context" : {
     "n_operateur": null,
     "geometry" : null,
     "record_timestamp": null,
+    "source": null,
     "facet_groups" : null
 },'''
 
@@ -52,13 +56,22 @@ j = "{"+context+j[1:len(j)]
 # Create graph from JSON-LD
 g = Graph().parse(data=j, format="json-ld")
 
-
-query = """SELECT ?name WHERE {
-            ?a <http://www.owl-ontologies.com/stations-velos.owl#station> ?id .
-            ?id <http://www.owl-ontologies.com/stations-velos.owl#@nest> ?stationID .
-            ?stationID <http://www.owl-ontologies.com/stations-velos.owl#name> ?name .
-        }"""
+a = []
+query = """PREFIX st:<http://www.owl-ontologies.com/stations-velos.owl#>
+    SELECT ?add ?insee ?name ?payant ?lat ?lon ?numberPlugs
+    WHERE {
+        ?a st:station ?id .
+        ?id <http://www.owl-ontologies.com/stations-velos.owl#@nest> ?vraiID .
+        ?vraiID st:address ?add .
+        ?vraiID st:zipcode ?insee .
+        ?vraiID st:name ?name .
+        ?vraiID st:isPayant ?payant .
+        ?vraiID st:numberPlugs ?numberPlugs .
+        ?vraiID st:coordonnees ?lat .
+        ?vraiID st:coordonnees ?lon .
+        FILTER(?lat > ?lon)
+    }"""
 
 # Querying Graph
 for _ in g.query(query):
-    print(_.name.toPython())
+    a.append(_)
