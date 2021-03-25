@@ -1,60 +1,7 @@
 import requests
 from rdflib import Graph
+from JSONLD import *
 
-context = '''"@context" : {
-    "@vocab":"http://www.owl-ontologies.com/stations-velos.owl#",
-    "@base":"http://www.owl-ontologies.com/stations-velos.owl/",
-    "nhits" : "total",
-    "rows" : "nbquery",
-    "start" : "start",
-    "dataset" : null,
-    "timezone": null,
-    "format": null,
-    "facet": null,
-
-    "id_pdc": "@id",
-    "n_station": "name",
-    "xlongitude": "lon",
-    "ylatitude": "lat",
-    "code_insee": "zipcode",
-    "ad_station": "address",
-    "nbre_pdc": "numberPlugs",
-    "acces_recharge": "isPayant",
-    "fields":"@nest",
-    "parameters": "@nest",
-    "records":{"@id":"station"}, 
-    "coordonnees": {"@container":"id"},
-    "isElectrical": "1", 
-
-    "id_station": null,
-    "datasetid": null,
-    "recordid": null,
-    "horaires_sav": null,
-    "tel_sav": null,
-    "type_prise": null,
-    "n_enseigne": null,
-    "n_amenageur": null,
-    "id_pdc": null,
-    "date_maj": null,
-    "geo_point_2d": null,
-    "accessibilite": null,
-    "puiss_max": null,
-    "observations": null,
-    "n_operateur": null,
-    "geometry" : null,
-    "record_timestamp": null,
-    "source": null,
-    "facet_groups" : null
-},'''
-
-r = requests.get("https://public.opendatasoft.com/api/records/1.0/search/?dataset=fichier-consolide-des-bornes-de-recharge-pour-vehicules-electriques-irve&q=&rows=10000&facet=n_enseigne&facet=nbre_pdc&facet=puiss_max&facet=accessibilite&facet=nom_epci&facet=commune&facet=nom_reg&facet=nom_dep")
-j = r.text
-
-# Transform JSON to JSON-LD adding context
-j = "{"+context+j[1:len(j)]
-
-# Create graph from JSON-LD
-g = Graph().parse(data=j, format="json-ld")
 
 a = []
 query = """PREFIX st:<http://www.owl-ontologies.com/stations-velos.owl#>
@@ -70,8 +17,13 @@ query = """PREFIX st:<http://www.owl-ontologies.com/stations-velos.owl#>
         ?vraiID st:coordonnees ?lat .
         ?vraiID st:coordonnees ?lon .
         FILTER(?lat > ?lon)
-    }"""
+    } LIMIT 1"""
 
-# Querying Graph
+URL = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=fichier-consolide-des-bornes-de-recharge-pour-vehicules-electriques-irve&q=&rows=10&facet=n_enseigne&facet=nbre_pdc&facet=puiss_max&facet=accessibilite&facet=nom_epci&facet=commune&facet=nom_reg&facet=nom_dep"
+
+jsonld = JSONLD(r'contexts/electric_car_parks.json', URL)
+g = Graph().parse(data=jsonld, format="json-ld")
+
 for _ in g.query(query):
     a.append(_)
+    print(_)
