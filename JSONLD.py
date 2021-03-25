@@ -15,5 +15,15 @@ def requestAPI(URL):
     return r.text
 
 
-def createJSONLD(context, request_response):
+def createJSONLD(context_file_path, request_response):
+    context = ""
+    data_buffer = open(context_file_path, 'r')
+
+    # Convert buffer to str
+    try:
+        str += data_buffer
+    except Exception as e:
+        pass
+    context += data_buffer.read()
+
     return "{" + context + request_response[1:len(request_response)]
