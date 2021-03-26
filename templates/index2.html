@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Electric car park</title>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
+
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster-src.js"></script>
+
+    <link rel="stylesheet" href="./static/style.css" />
+    <link rel="icon" type="image/png" href="./static/logo.png" />
+</head>
+
+<body>
+    <div class="left-panel">
+        <div class="logo">
+            <img src="./static/logo.png" alt="" />
+        </div>
+        <div id="results">
+            <div>
+                {% for record in data %}
+                <div class="card">
+                    <p>{{record['adress']}}</p>
+                    <p>{{record['zipcode']}} CITY</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="right-panel">
+        <form action="" method="POST">
+            <div class="search-bar">
+                <button type="submit">
+                    <span class="material-icons">search</span>
+                </button>
+                <input type="text" list="zipcodes" name="search" id="search" value="" minlength="5" maxlength="5"
+                    placeholder="Enter a zipcode" />
+                <datalist id="zipcodes">
+                    <template id="resultstemplate">
+                        {% for zipcode in all_zipcodes %}
+                        <option value="{{zipcode}}" />
+                        {% endfor %}
+                    </template>
+                </datalist>
+            </div>
+
+            <div class="filters">
+                <div>Filters :</div>
+                <div>
+                    <input type="checkbox" name="paying" id="paying" checked />
+                    <label for="paying">Paying</label>
+                </div>
+                <div>
+                    <input type="checkbox" name="free" id="free" checked />
+                    <label for="free">Free</label>
+                </div>
+            </div>
+        </form>
+        <div id="map"></div>
+    </div>
+</body>
+
+<script>
+    /* Datalist dropdown */
+    var search = document.querySelector('#search');
+    var results = document.querySelector('#zipcodes');
+    var templateContent = document.querySelector('#resultstemplate').content;
+
+    search.addEventListener('click', function handler(event) {
+        while (results.children.length) results.removeChild(results.firstChild);
+        var inputVal = new RegExp(search.value.trim(), 'i');
+        var set = Array.prototype.reduce.call(templateContent.cloneNode(true).children, function searchFilter(frag, item, i) {
+            if (inputVal.test(item.textContent) && frag.children.length < 10) frag.appendChild(item);
+            return frag;
+        }, document.createDocumentFragment());
+        results.appendChild(set);
+    });
+
+
+    var map = L.map('map').setView([48.856614, 2.3522219], 11);
+
+    var stamenToner = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox/streets-v11',
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: 'pk.eyJ1IjoibWNoZWlja2kiLCJhIjoiY2ttZ3VlYXFyMDB5eTJ4bXF3bmp6Zng2cyJ9.ZukfPhGAAp8xIx1Xk55VPg'
+    }).addTo(map);
+
+
+    {% for record in data %}
+    var marker = L.marker([{{ record['lat']}}, {{record['lon']}}]).addTo(map).bindPopup("TEST");
+    {% endfor %}
+
+</script>
+
+</html>

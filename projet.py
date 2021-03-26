@@ -54,8 +54,7 @@ test = PREFIX + """SELECT ?zipcode
         ?vraiID st:zipcode ?zipcode .
     }LIMIT 1"""
 
-query = """PREFIX st:<http://www.owl-ontologies.com/stations-velos.owl#>
-    SELECT ?add ?name ?payant ?lat ?lon ?numberPlugs ?zipcode
+query = PREFIX + """SELECT ?add ?name ?payant ?lat ?lon ?numberPlugs ?zipcode
     WHERE {
         ?a st:station ?id .
         ?id <http://www.owl-ontologies.com/stations-velos.owl#@nest> ?vraiID .
