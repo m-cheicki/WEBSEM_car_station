@@ -2,6 +2,7 @@ from flask import Flask, render_template, url_for, request
 from rdflib import Graph, URIRef, Literal
 from rdflib.plugins.sparql import prepareQuery
 from JSONLD import *
+from Queries import *
 
 app = Flask(__name__)
 
@@ -26,22 +27,8 @@ def index():
                 ?stationID <http://www.owl-ontologies.com/stations-velos.owl#zipcode> ?zipcode .
             }"""
 
-    query = PREFIX + """SELECT ?add ?name ?payant ?lat ?lon ?numberPlugs ?zipcode
-        WHERE {
-            ?a st:station ?id .
-            ?id <http://www.owl-ontologies.com/stations-velos.owl#@nest> ?vraiID .
-            ?vraiID st:address ?add .
-            ?vraiID st:zipcode ?zipcode .
-            ?vraiID st:name ?name .
-            ?vraiID st:isPayant ?payant .
-            ?vraiID st:numberPlugs ?numberPlugs .
-            ?vraiID st:coordonnees ?lat .
-            ?vraiID st:coordonnees ?lon .
-            FILTER(?lat > ?lon)
-        }"""
-
+    query = Queries.ALL_INFORMATION_FOR_ELECTRICS.value
     all_zipcodes = []
-    zipcodes = []
     data = []
 
     for _ in g.query(zipcode_query):
@@ -74,11 +61,8 @@ def index():
                 "numberPlugs": _.numberPlugs.toPython(),
             }
             data.append(record)
-        print("GET  :" + str(len(data)))
-    zipcodes = all_zipcodes
 
-    print(len(data))
-    return render_template('index.html', all_zipcodes=all_zipcodes, zipcodes=zipcodes, data=data)
+    return render_template('index.html', all_zipcodes=all_zipcodes, zipcodes=all_zipcodes, data=data)
 
 
 @app.route('/essence', methods=['GET', 'POST'])
