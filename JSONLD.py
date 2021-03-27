@@ -26,4 +26,4 @@ def createJSONLD(context_file_path, request_response):
         pass
     context += data_buffer.read()
 
-    return "{" + context + request_response[1:len(request_response)]
+    return context[:-1] + "," + request_response[1:len(request_response)]
