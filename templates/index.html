@@ -143,16 +143,16 @@
 
 		var map = L.map('map').setView([48.856614, 2.3522219], 11);
 		var electric = L.icon({
-			iconUrl: 'http://electric-car-park.mcheicki.com/public/images/electric.png',
-			iconSize: [25, 25], // size of the icon
-			iconAnchor: [12, 12], // point of the icon which will correspond to marker's location
-			popupAnchor: [0, -12] // point from which the popup should open relative to the iconAnchor
+			iconUrl: 'http://car-station.mcheicki.com/public/images/electric.png',
+			iconSize: [25, 25],
+			iconAnchor: [12, 12],
+			popupAnchor: [0, -12]
 		});
 		var fuel = L.icon({
-			iconUrl: 'http://electric-car-park.mcheicki.com/public/images/fuel.png',
-			iconSize: [25, 25], // size of the icon
-			iconAnchor: [12, 12], // point of the icon which will correspond to marker's location
-			popupAnchor: [0, -12] // point from which the popup should open relative to the iconAnchor
+			iconUrl: 'http://car-station.mcheicki.com/public/images/fuel.png',
+			iconSize: [25, 25],
+			iconAnchor: [12, 12],
+			popupAnchor: [0, -12]
 		});
 
 		var createMap = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {

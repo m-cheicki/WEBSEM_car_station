@@ -2,15 +2,19 @@ import requests
 from rdflib import Graph, URIRef, Literal
 from rdflib.plugins.sparql import prepareQuery
 from rdflib.namespace import DC, DCTERMS, DOAP, FOAF, SKOS, OWL, RDF, RDFS, VOID, XMLNS, XSD
-
+import re
 
 from JSONLD import *
 
 PREFIX = 'PREFIX st:<http://www.owl-ontologies.com/stations-velos.owl#>'
-URL = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=fichier-consolide-des-bornes-de-recharge-pour-vehicules-electriques-irve&q=&rows=10000&facet=n_enseigne&facet=nbre_pdc&facet=puiss_max&facet=accessibilite&facet=nom_epci&facet=commune&facet=nom_reg&facet=nom_dep"
+URL = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=fichier-consolide-des-bornes-de-recharge-pour-vehicules-electriques-irve&q=&rows=1&facet=n_enseigne&facet=nbre_pdc&facet=puiss_max&facet=accessibilite&facet=nom_epci&facet=commune&facet=nom_reg&facet=nom_dep"
+CARS_API_URL = "https://data.opendatasoft.com/api/records/1.0/search/?dataset=stations-services-en-france%40datanova&q=&facet=typeroute&facet=commune&facet=codepostal&facet=services&facet=carburants&facet=activite&rows=1"
 
 jsonld = JSONLD(r'contexts/electric_car_parks.json', URL)
-g = Graph().parse(data=jsonld, format="json-ld")
+jsonld2 = JSONLD(r'contexts/car_parks.json', CARS_API_URL)
+g = Graph()
+g.parse(data=jsonld, format="json-ld")
+g.parse(data=jsonld2, format="json-ld")
 
 a = []
 query = """PREFIX st:<http://www.owl-ontologies.com/stations-velos.owl#>
@@ -68,8 +72,39 @@ query = PREFIX + """SELECT ?add ?name ?payant ?lat ?lon ?numberPlugs ?zipcode
         FILTER(?lat > ?lon)
     } LIMIT 1"""
 
-code = Literal("75113")
-q = prepareQuery(query)
+# code = Literal("75113")
+# q = prepareQuery(query)
 
-for _ in g.query(q, initBindings={'zipcode': code}):
-    print(_)
+# for _ in g.query(q, initBindings={'zipcode': code}):
+#     print(_)
+
+
+COMMON_INFORMATION = PREFIX + """SELECT ?name ?add ?zipcode ?lat ?lon ?isElectrical ?services ?city ?fuel
+        WHERE {
+            ?a st:station ?id .
+            ?id <http://www.owl-ontologies.com/stations-velos.owl#@nest> ?stationID .
+            ?stationID st:address ?add .
+            ?stationID st:zipcode ?zipcode .
+            ?stationID st:coordonnees ?lat .
+            ?stationID st:coordonnees ?lon .
+            ?stationID st:isElectrical ?isElectrical .
+            OPTIONAL{
+                ?stationID st:name ?name .
+            }
+            OPTIONAL{
+                ?stationID st:services ?services .
+            }
+            OPTIONAL{
+                ?stationID st:city ?city .
+            }
+            OPTIONAL{
+                ?stationID st:fuel ?fuel .
+            }
+        
+            FILTER(?lat > ?lon)
+        }"""
+
+for _ in g.query(COMMON_INFORMATION):
+    isElectrical = _.isElectrical.value
+    string = re.match('^http', isElectrical)
+    print(False if string is None else True)
