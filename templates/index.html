@@ -179,6 +179,13 @@
 			accessToken: 'pk.eyJ1IjoibWNoZWlja2kiLCJhIjoiY2ttZ3VlYXFyMDB5eTJ4bXF3bmp6Zng2cyJ9.ZukfPhGAAp8xIx1Xk55VPg'
 		}).addTo(map);
 
+		map.locate({setView: true, watch: true, maxZoom: 13})
+			.on('locationfound', function(e){
+				// user lets us use his position
+			})
+			.on('locationerror', function(e){
+				// user has blocked his position
+			});
 
 			{% for record in data %}
 				{% if record['isElectrical'] %}
