@@ -41,6 +41,25 @@ def parse_data(item):
     return record
 
 
+def check_filters():
+    if request.form.get('type_of_car'):
+        checked = request.form.getlist('type_of_car')
+
+        if 'electric' in checked and 'thermic' not in checked:
+            query = Queries.ELECTRIC_CARS_ONLY.value
+
+        elif 'thermic' in checked and 'electric' not in checked:
+            query = Queries.THERMIC_CARS_ONLY.value
+
+        else:
+            query = Queries.ALL_CARS.value
+
+    else:
+        query = Queries.ALL_CARS.value
+
+    return query
+
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
 
@@ -56,47 +75,17 @@ def index():
     if request.method == 'POST':
         if request.form['search']:
             code = Literal(request.form['search'])
-
-            if request.form.get('type_of_car'):
-                checked = request.form.getlist('type_of_car')
-
-                if 'electric' in checked and 'thermic' not in checked:
-                    query = Queries.ELECTRIC_CARS_ONLY.value
-
-                elif 'thermic' in checked and 'electric' not in checked:
-                    query = Queries.THERMIC_CARS_ONLY.value
-
-                else:
-                    query = Queries.ALL_CARS.value
-
+            query = check_filters()
             q = prepareQuery(query)
-            for _ in g.query(q, initBindings={'zipcode': code}):
-                data.append(parse_data(_))
+
+            for item in g.query(q, initBindings={'zipcode': code}):
+                data.append(parse_data(item))
 
         else:
-            if request.form.get('type_of_car'):
-                checked = request.form.getlist('type_of_car')
+            query = check_filters()
 
-                if 'electric' in checked and 'thermic' not in checked:
-                    query = Queries.ELECTRIC_CARS_ONLY.value
-
-                    for item in g.query(query):
-                        data.append(parse_data(item))
-
-                elif 'thermic' in checked and 'electric' not in checked:
-                    query = Queries.THERMIC_CARS_ONLY.value
-                    for item in g.query(query):
-                        data.append(parse_data(item))
-
-                else:
-                    query = Queries.ALL_CARS.value
-                    for item in g.query(query):
-                        data.append(parse_data(item))
-
-            else:
-                query = Queries.ALL_CARS.value
-                for item in g.query(query):
-                    data.append(parse_data(item))
+            for item in g.query(query):
+                data.append(parse_data(item))
 
     else:
         for item in g.query(query):
