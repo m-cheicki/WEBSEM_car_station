@@ -21,20 +21,52 @@ g.parse(data=electric_cars_jsonLD, format="json-ld")
 g.parse(data=cars_jsonLD, format="json-ld")
 
 
+def parse_data(graph, query):
+    data = []
+    for _ in graph.query(query):
+        regex = re.match('^http', _.isElectrical.value)
+        isElectrical = False if regex is None else True
+        record = {
+            "adress": _.add.value,
+            "zipcode": _.zipcode.value,
+            "lat": _.lat.value,
+            "lon": _.lon.value,
+            "isElectrical": isElectrical,
+
+            "name": "" if _.name is None else _.name.value,
+            "services": "" if _.services is None else _.services.value,
+            "city": "" if _.city is None else _.city.value,
+            "fuel": "" if _.fuel is None else _.fuel.value,
+            "paying": "" if _.isPayant is None else _.isPayant.value,
+            "numberPlugs": "" if _.numberPlugs is None else _.numberPlugs.value,
+        }
+        data.append(record)
+    return data
+
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
 
     # Queries
     zipcode_query = Queries.ALL_ZIPCODES.value
-    query = Queries.ALL_INFORMATION_FOR_ELECTRICS.value
-    init_query = Queries.COMMON_INFORMATION.value
-    all_zipcodes = []
+    query = Queries.ELECTRIC_CARS_ONLY.value
+    init_query = Queries.ALL_CARS.value
     data = []
+    all_zipcodes = []
 
     for _ in g.query(zipcode_query):
         all_zipcodes.append(_.zipcode.value)
 
     if request.method == 'POST':
+        if request.form['type_of_car']:
+            checked = request.form.getlist('type_of_car')
+            if 'electric' in checked and 'thermic' not in checked:
+                print("electric cars")
+            elif 'thermic' in checked and 'electric' not in checked:
+                print('thermic')
+            else:
+                print("NONE OR BOTH")
+
         code = Literal(request.form['search'])
         q = prepareQuery(query)
         for _ in g.query(q, initBindings={'zipcode': code}):
@@ -50,24 +82,7 @@ def index():
             data.append(record)
 
     else:
-        for _ in g.query(init_query):
-            regex = re.match('^http', _.isElectrical.value)
-            isElectrical = False if regex is None else True
-            record = {
-                "adress": _.add.value,
-                "zipcode": _.zipcode.value,
-                "lat": _.lat.value,
-                "lon": _.lon.value,
-                "isElectrical": isElectrical,
-
-                "name": "" if _.name is None else _.name.value,
-                "services": "" if _.services is None else _.services.value,
-                "city": "" if _.city is None else _.city.value,
-                "fuel": "" if _.fuel is None else _.fuel.value,
-                "paying": "" if _.isPayant is None else _.isPayant.value,
-                "numberPlugs": "" if _.numberPlugs is None else _.numberPlugs.value,
-            }
-            data.append(record)
+        data = parse_data(g, init_query)
 
     return render_template('index.html', all_zipcodes=all_zipcodes, data=data)
 

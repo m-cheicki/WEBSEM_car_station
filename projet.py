@@ -104,7 +104,52 @@ COMMON_INFORMATION = PREFIX + """SELECT ?name ?add ?zipcode ?lat ?lon ?isElectri
             FILTER(?lat > ?lon)
         }"""
 
-for _ in g.query(COMMON_INFORMATION):
-    isElectrical = _.isElectrical.value
-    string = re.match('^http', isElectrical)
-    print(False if string is None else True)
+THERMIC_CARS_ONLY = PREFIX + """SELECT DISTINCT ?add ?zipcode ?city ?services ?fuel ?isElectrical ?lat ?lon
+    WHERE {
+        ?a st:station ?id .
+        ?id <http://www.owl-ontologies.com/stations-velos.owl#@nest> ?stationID .
+        ?stationID st:address ?add .
+        ?stationID st:zipcode ?zipcode .
+        ?stationID st:city ?city .
+        ?stationID st:coordonnees ?lat .
+        ?stationID st:coordonnees ?lon .
+
+        VALUES ?isElectrical {'R' 'A' 'N'}
+        ?stationID st:isElectrical ?isElectrical .
+
+        OPTIONAL{
+            ?stationID st:fuel ?fuel .
+        }
+        OPTIONAL{
+            ?stationID st:services ?services .
+        }
+        FILTER(?lat > ?lon)
+    }
+"""
+
+ELECTRIC_CARS_ONLY = PREFIX + """SELECT DISTINCT ?add ?name ?zipcode ?lat ?lon ?payant ?numberPlugs
+    WHERE {
+        ?a st:station ?id .
+        ?id <http://www.owl-ontologies.com/stations-velos.owl#@nest> ?stationID .
+        ?stationID st:address ?add .
+        ?stationID st:zipcode ?zipcode .
+        ?stationID st:coordonnees ?lat .
+        ?stationID st:coordonnees ?lon .
+        ?stationID st:isElectrical ?isElectrical .
+        ?stationID st:isPayant ?payant .
+        ?stationID st:numberPlugs ?numberPlugs .
+        ?stationID st:name ?name .
+
+        FILTER(?lat > ?lon)
+    }
+"""
+
+for _ in g.query(ELECTRIC_CARS_ONLY):
+    print(_)
+    print()
+
+"""
+?stationID st:isPayant ?payant .
+?stationID st:numberPlugs ?numberPlugs .
+? stationIDst: name ? name.
+"""

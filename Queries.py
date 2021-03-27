@@ -4,7 +4,7 @@ PREFIX = "PREFIX st:<http://www.owl-ontologies.com/stations-velos.owl#>"
 
 
 class Queries(Enum):
-    COMMON_INFORMATION = PREFIX + """SELECT
+    ALL_CARS = PREFIX + """SELECT
         ?name ?add ?zipcode ?lat ?lon ?isElectrical ?services ?city ?fuel ?isPayant ?numberPlugs
         WHERE {
             ?a st:station ?id .
@@ -34,30 +34,46 @@ class Queries(Enum):
             }
             FILTER(?lat > ?lon)
         }"""
-    ALL_INFORMATION_FOR_THERMICS = PREFIX + """SELECT ?add ?insee ?lat ?lon
-        WHERE {
-            ?a st:station ?id .
-            ?id <http://www.owl-ontologies.com/stations-velos.owl#@nest> ?vraiID .
-            ?vraiID st:address ?add .
-            ?vraiID st:zipcode ?insee .
-            ?vraiID st:latlng ?lat .
-            ?vraiID st:latlng ?lon .
-            FILTER(?lat > ?lon)
-        }"""
 
-    ALL_INFORMATION_FOR_ELECTRICS = PREFIX + """SELECT ?add ?name ?payant ?lat ?lon ?numberPlugs ?zipcode
+    THERMIC_CARS_ONLY = PREFIX + """SELECT DISTINCT ?add ?zipcode ?city ?services ?fuel ?isElectrical ?lat ?lon
         WHERE {
             ?a st:station ?id .
-            ?id <http://www.owl-ontologies.com/stations-velos.owl#@nest> ?vraiID .
-            ?vraiID st:address ?add .
-            ?vraiID st:zipcode ?zipcode .
-            ?vraiID st:name ?name .
-            ?vraiID st:isPayant ?payant .
-            ?vraiID st:numberPlugs ?numberPlugs .
-            ?vraiID st:coordonnees ?lat .
-            ?vraiID st:coordonnees ?lon .
+            ?id <http://www.owl-ontologies.com/stations-velos.owl#@nest> ?stationID .
+            ?stationID st:address ?add .
+            ?stationID st:zipcode ?zipcode .
+            ?stationID st:city ?city .
+            ?stationID st:coordonnees ?lat .
+            ?stationID st:coordonnees ?lon .
+
+            VALUES ?isElectrical {'R' 'A' 'N'}
+            ?stationID st:isElectrical ?isElectrical .
+
+            OPTIONAL{
+                ?stationID st:fuel ?fuel .
+            }
+            OPTIONAL{
+                ?stationID st:services ?services .
+            }
             FILTER(?lat > ?lon)
-        }"""
+        }
+    """
+
+    ELECTRIC_CARS_ONLY = PREFIX + """SELECT DISTINCT ?add ?name ?zipcode ?lat ?lon ?payant ?numberPlugs
+        WHERE {
+            ?a st:station ?id .
+            ?id <http://www.owl-ontologies.com/stations-velos.owl#@nest> ?stationID .
+            ?stationID st:address ?add .
+            ?stationID st:zipcode ?zipcode .
+            ?stationID st:coordonnees ?lat .
+            ?stationID st:coordonnees ?lon .
+            ?stationID st:isElectrical ?isElectrical .
+            ?stationID st:isPayant ?payant .
+            ?stationID st:numberPlugs ?numberPlugs .
+            ?stationID st:name ?name .
+
+            FILTER(?lat > ?lon)
+        }
+    """
 
     ALL_ZIPCODES = PREFIX + """SELECT ?zipcode WHERE {
             ?a st:station ?id .
