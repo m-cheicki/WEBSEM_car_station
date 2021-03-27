@@ -21,27 +21,24 @@ g.parse(data=electric_cars_jsonLD, format="json-ld")
 g.parse(data=cars_jsonLD, format="json-ld")
 
 
-def parse_data(graph, query):
-    data = []
-    for _ in graph.query(query):
-        regex = re.match('^http', _.isElectrical.value)
-        isElectrical = False if regex is None else True
-        record = {
-            "adress": _.add.value,
-            "zipcode": _.zipcode.value,
-            "lat": _.lat.value,
-            "lon": _.lon.value,
-            "isElectrical": isElectrical,
+def parse_data(item):
+    regex = re.match('^http', item.isElectrical.value)
+    isElectrical = False if regex is None else True
+    record = {
+        "adress": item.add.value,
+        "zipcode": item.zipcode.value,
+        "lat": item.lat.value,
+        "lon": item.lon.value,
+        "isElectrical": isElectrical,
 
-            "name": "" if _.name is None else _.name.value,
-            "services": "" if _.services is None else _.services.value,
-            "city": "" if _.city is None else _.city.value,
-            "fuel": "" if _.fuel is None else _.fuel.value,
-            "paying": "" if _.isPayant is None else _.isPayant.value,
-            "numberPlugs": "" if _.numberPlugs is None else _.numberPlugs.value,
-        }
-        data.append(record)
-    return data
+        "name": "" if item.name is None else item.name.value,
+        "services": "" if item.services is None else item.services.value,
+        "city": "" if item.city is None else item.city.value,
+        "fuel": "" if item.fuel is None else item.fuel.value,
+        "paying": "" if item.isPayant is None else item.isPayant.value,
+        "numberPlugs": "" if item.numberPlugs is None else item.numberPlugs.value,
+    }
+    return record
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -49,8 +46,7 @@ def index():
 
     # Queries
     zipcode_query = Queries.ALL_ZIPCODES.value
-    query = Queries.ELECTRIC_CARS_ONLY.value
-    init_query = Queries.ALL_CARS.value
+    query = Queries.ALL_CARS.value
     data = []
     all_zipcodes = []
 
@@ -58,31 +54,53 @@ def index():
         all_zipcodes.append(_.zipcode.value)
 
     if request.method == 'POST':
-        if request.form['type_of_car']:
-            checked = request.form.getlist('type_of_car')
-            if 'electric' in checked and 'thermic' not in checked:
-                print("electric cars")
-            elif 'thermic' in checked and 'electric' not in checked:
-                print('thermic')
-            else:
-                print("NONE OR BOTH")
+        if request.form['search']:
+            code = Literal(request.form['search'])
 
-        code = Literal(request.form['search'])
-        q = prepareQuery(query)
-        for _ in g.query(q, initBindings={'zipcode': code}):
-            record = {
-                "name": _.name.value,
-                "adress": _.add.value,
-                "zipcode":  _.zipcode.value,
-                "paying": _.payant.value,
-                "lat": _.lat.value,
-                "lon": _.lon.value,
-                "numberPlugs": _.numberPlugs.value,
-            }
-            data.append(record)
+            if request.form.get('type_of_car'):
+                checked = request.form.getlist('type_of_car')
+
+                if 'electric' in checked and 'thermic' not in checked:
+                    query = Queries.ELECTRIC_CARS_ONLY.value
+
+                elif 'thermic' in checked and 'electric' not in checked:
+                    query = Queries.THERMIC_CARS_ONLY.value
+
+                else:
+                    query = Queries.ALL_CARS.value
+
+            q = prepareQuery(query)
+            for _ in g.query(q, initBindings={'zipcode': code}):
+                data.append(parse_data(_))
+
+        else:
+            if request.form.get('type_of_car'):
+                checked = request.form.getlist('type_of_car')
+
+                if 'electric' in checked and 'thermic' not in checked:
+                    query = Queries.ELECTRIC_CARS_ONLY.value
+
+                    for item in g.query(query):
+                        data.append(parse_data(item))
+
+                elif 'thermic' in checked and 'electric' not in checked:
+                    query = Queries.THERMIC_CARS_ONLY.value
+                    for item in g.query(query):
+                        data.append(parse_data(item))
+
+                else:
+                    query = Queries.ALL_CARS.value
+                    for item in g.query(query):
+                        data.append(parse_data(item))
+
+            else:
+                query = Queries.ALL_CARS.value
+                for item in g.query(query):
+                    data.append(parse_data(item))
 
     else:
-        data = parse_data(g, init_query)
+        for item in g.query(query):
+            data.append(parse_data(item))
 
     return render_template('index.html', all_zipcodes=all_zipcodes, data=data)
 

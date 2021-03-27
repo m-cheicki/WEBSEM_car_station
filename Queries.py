@@ -35,7 +35,7 @@ class Queries(Enum):
             FILTER(?lat > ?lon)
         }"""
 
-    THERMIC_CARS_ONLY = PREFIX + """SELECT DISTINCT ?add ?zipcode ?city ?services ?fuel ?isElectrical ?lat ?lon
+    THERMIC_CARS_ONLY = PREFIX + """SELECT DISTINCT ?name ?add ?zipcode ?lat ?lon ?isElectrical ?services ?city ?fuel ?isPayant ?numberPlugs
         WHERE {
             ?a st:station ?id .
             ?id <http://www.owl-ontologies.com/stations-velos.owl#@nest> ?stationID .
@@ -58,7 +58,7 @@ class Queries(Enum):
         }
     """
 
-    ELECTRIC_CARS_ONLY = PREFIX + """SELECT DISTINCT ?add ?name ?zipcode ?lat ?lon ?payant ?numberPlugs
+    ELECTRIC_CARS_ONLY = PREFIX + """SELECT DISTINCT ?name ?add ?zipcode ?lat ?lon ?isElectrical ?services ?city ?fuel ?isPayant ?numberPlugs
         WHERE {
             ?a st:station ?id .
             ?id <http://www.owl-ontologies.com/stations-velos.owl#@nest> ?stationID .
@@ -67,7 +67,7 @@ class Queries(Enum):
             ?stationID st:coordonnees ?lat .
             ?stationID st:coordonnees ?lon .
             ?stationID st:isElectrical ?isElectrical .
-            ?stationID st:isPayant ?payant .
+            ?stationID st:isPayant ?isPayant .
             ?stationID st:numberPlugs ?numberPlugs .
             ?stationID st:name ?name .
 
