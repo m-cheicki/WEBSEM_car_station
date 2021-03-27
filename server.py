@@ -1,16 +1,16 @@
 import re
-from flask import Flask, render_template, url_for, request
-from rdflib import Graph, URIRef, Literal
+from flask import Flask, render_template, request
+from rdflib import Graph, Literal
 from rdflib.plugins.sparql import prepareQuery
 from JSONLD import *
 from Queries import *
 
 app = Flask(__name__)
-
-ELECTRIC_CARS_API_URL = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=fichier-consolide-des-bornes-de-recharge-pour-vehicules-electriques-irve&q=&rows=300&facet=n_enseigne&facet=nbre_pdc&facet=puiss_max&facet=accessibilite&facet=nom_epci&facet=commune&facet=nom_reg&facet=nom_dep"
+NUMBER_OF_RESULTS = str(250)
+ELECTRIC_CARS_API_URL = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=fichier-consolide-des-bornes-de-recharge-pour-vehicules-electriques-irve&q=&facet=n_enseigne&facet=nbre_pdc&facet=puiss_max&facet=accessibilite&facet=nom_epci&facet=commune&facet=nom_reg&facet=nom_dep&rows=" + NUMBER_OF_RESULTS
 ELECTRIC_CARS_CONTEXT = r'contexts/electric_car_parks.json'
 
-CARS_API_URL = "https://data.opendatasoft.com/api/records/1.0/search/?dataset=stations-services-en-france%40datanova&q=&facet=typeroute&facet=commune&facet=codepostal&facet=services&facet=carburants&facet=activite&rows=300"
+CARS_API_URL = "https://data.opendatasoft.com/api/records/1.0/search/?dataset=stations-services-en-france%40datanova&q=&facet=typeroute&facet=commune&facet=codepostal&facet=services&facet=carburants&facet=activite&rows=" + NUMBER_OF_RESULTS
 CARS_CONTEXT = r'contexts/car_parks.json'
 
 electric_cars_jsonLD = JSONLD(ELECTRIC_CARS_CONTEXT, ELECTRIC_CARS_API_URL)
@@ -30,7 +30,6 @@ def parse_data(item):
         "lat": item.lat.value,
         "lon": item.lon.value,
         "isElectrical": isElectrical,
-
         "name": "" if item.name is None else item.name.value,
         "services": "" if item.services is None else item.services.value,
         "city": "" if item.city is None else item.city.value,
@@ -62,8 +61,6 @@ def check_filters():
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-
-    # Queries
     zipcode_query = Queries.ALL_ZIPCODES.value
     query = Queries.ALL_CARS.value
     data = []
