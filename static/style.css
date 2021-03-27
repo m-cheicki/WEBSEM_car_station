@@ -10,6 +10,7 @@
 	--blue: #4285f4;
 
 	--light-blue: #0a91ab40;
+
 	--yellow: #fbbc05;
 }
 
@@ -49,6 +50,7 @@ div.left-panel {
 	display: flex;
 
 	flex-direction: column;
+
 	max-width: 500px;
 }
 
@@ -140,6 +142,10 @@ div.left-panel {
 	border-radius: 10px;
 
 	border: 1px solid rgba(255, 255, 255, 0.18);
+
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
 .card:first-child {
@@ -158,16 +164,22 @@ div.left-panel {
 
 .card p {
 	color: var(--light);
-
 	padding: 8px 0 0;
 }
 
-.card p:nth-last-child(-n + 2) {
-	color: var(--blue);
-
-	font-size: 12px;
+.card img {
+	width: 60px;
+	margin-right: 12px;
 }
 
+.card div:nth-child(2) {
+	flex: 1;
+}
+
+.card div:nth-child(2) p:nth-last-child(-n + 2) {
+	color: var(--blue);
+	font-size: 14px;
+}
 /******************************************
 
 				RIGHT PANEL 
@@ -176,6 +188,7 @@ div.left-panel {
 
 div.right-panel {
 	flex-grow: 5;
+
 	margin: 0 0 24px 0;
 }
 
@@ -289,6 +302,8 @@ input[type="text"]:focus {
 
 #map {
 	height: calc(100% - 96px);
+
 	width: 95%;
+
 	margin: auto;
 }
