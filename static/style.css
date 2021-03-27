@@ -325,3 +325,18 @@ input[type="text"]:focus {
 
 	margin: auto;
 }
+
+.leaflet-popup-content * {
+	margin: 0;
+	padding: 0;
+	font-size: 12px;
+}
+
+.leaflet-popup-content h2 {
+	color: var(--yellow);
+}
+
+.leaflet-popup-content p {
+	margin: 0;
+	padding: 0;
+}

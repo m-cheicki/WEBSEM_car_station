@@ -25,15 +25,15 @@ def parse_data(item):
     regex = re.match('^http', item.isElectrical.value)
     isElectrical = False if regex is None else True
     record = {
-        "adress": item.add.value,
+        "address": item.add.value.replace('\n\r', ' ').replace('\r\n', ' ').replace('\r', ' ').replace('\n', ' '),
         "zipcode": item.zipcode.value,
         "lat": item.lat.value,
         "lon": item.lon.value,
         "isElectrical": isElectrical,
         "name": "" if item.name is None else item.name.value,
-        "services": "" if item.services is None else item.services.value,
+        "services": "" if item.services is None else item.services.value.replace('|', ', '),
         "city": "" if item.city is None else item.city.value,
-        "fuel": "" if item.fuel is None else item.fuel.value,
+        "fuel": "" if item.fuel is None else item.fuel.value.replace('|', ', '),
         "paying": "" if item.isPayant is None else item.isPayant.value,
         "numberPlugs": "" if item.numberPlugs is None else item.numberPlugs.value,
     }

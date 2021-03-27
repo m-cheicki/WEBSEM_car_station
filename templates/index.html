@@ -62,7 +62,7 @@
 						</div>
 						<div>
 							<strong>{{record['name']}}</strong>
-							<p>{{record['adress']}}</p>
+							<p>{{record['address']}}</p>
 
 							{% if record['isElectrical'] %}
 							<p>Number of plugs : {{record['numberPlugs']}}</p>
@@ -72,11 +72,8 @@
 
 							{% else %}
 							<p>{{record['zipcode']}} {{record['city']}}</p>
-							<p>Fuel : {{record['fuel'].replace('|', ', ')}}</p>
-							<p>
-								Services : {{record['services'].replace('|', ',
-								')}}
-							</p>
+							<p>Fuel : {{record['fuel']}}</p>
+							<p>Services : {{record['services']}}</p>
 
 							{% endif %}
 						</div>
@@ -185,10 +182,24 @@
 
 			{% for record in data %}
 				{% if record['isElectrical'] %}
-					var marker = L.marker([{{ record['lat'] }}, {{ record['lon'] }}],  { icon: electric }).addTo(map).bindPopup("TEST");
+					var text = "<div>"
+					text = "<h2>{{record['name']}}</h2>"
+					text += "<p>{{record['address']}}</p>"
+					text += "<br/>"
+					text += "<p>Number of plugs : {{record['numberPlugs']}}</p>"
+					text += "<p style='text-transform: capitalize'>{{record['paying']}}</p>"
+					text += "</div>"
 				{% else %}
-					var marker = L.marker([{{ record['lat'] }}, {{ record['lon'] }}],  { icon: fuel }).addTo(map).bindPopup("TEST");
+					var text = "<div>"
+					text += "<p>{{record['address']}}</p>"
+					text += "<p>{{record['zipcode']}} {{record['city']}}</p>"
+					text += "<br/>"
+					text += "<p>Fuel : {{record['fuel']}}</p>"
+					text += "<p>Services : {{record['services']}}</p>"
+					text += "</div>"
 				{% endif %}
+				var isElectrical = {{record['isElectrical']|int}}
+				var marker = L.marker([{{ record['lat'] }}, {{ record['lon'] }}],  { icon: (isElectrical? electric : fuel) }).addTo(map).bindPopup(text);
 			{% endfor %}
 	</script>
 </html>
