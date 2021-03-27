@@ -91,7 +91,7 @@ div.left-panel {
  ******************************************/
 
 #results > div {
-	height: calc(90vh - 96px);
+	height: calc(85vh - 96px);
 
 	width: 90%;
 
@@ -114,6 +114,24 @@ div.left-panel {
 	background: var(--blue);
 
 	border-radius: 4px;
+}
+
+.no-results {
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 24px;
+	color: #ea4335;
+	font-weight: bold;
+}
+
+.nb-results {
+	margin: 16px 48px 0;
+	font-size: 18px;
+	font-weight: bold;
+	color: var(--blue);
+	opacity: 0.5;
 }
 
 /******************************************
