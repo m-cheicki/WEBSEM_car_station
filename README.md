@@ -1,7 +1,11 @@
-# Car station
-
-A4 ESILV - WEB DATAMINING AND SEMANTICS<br/>
-Amar Merwan CHELOUAH - Kévin CELIE - Mariyam CHEICK ISMAIL
+<p align="center">
+    <img src='https://github.com/m-cheicki/WEBSEM_car_station/blob/main/static/logo.png' alt='logo'>
+    <h1 style="text-align: center">Car station</h1>
+    <p style="text-align: center">
+        A4 ESILV - WEB DATAMINING AND SEMANTICS<br/>
+        Amar Merwan CHELOUAH - Kévin CELIE - Mariyam CHEICK ISMAIL 
+    </p>
+</p>
 
 ---
 
@@ -17,7 +21,7 @@ You can also filter by type of car: either thermic or electric. And also, you ca
 
 ### Demonstration video
 
-<a href="https://car-station.mcheicki.com/public/DEMO_DIA4_GROUP5_CELIE_CHELOUAH_CHEICKISMAIL_WEBSEM.mp4" download>Click here to download the video</a>
+<a href="https://car-station.mcheicki.com/public/DEMO_DIA4_GROUP5_CELIE_CHELOUAH_CHEICKISMAIL_WEBSEM.mp4">Click here to watch the video</a>
 
 ## How to install
 
@@ -46,21 +50,21 @@ if __name__ == '__main__':
 -   Open a web browser like Chrome and go to [this URL: http://localhost:5000/](http://localhost:5000/)
 -   Wait few seconds, and here you are! The app is loading
 
-**NOTE : As the server has the version 3.8.6 of Python we strongly recommand to have this version or higher**
+**NOTE : As the server has the version 3.8.6 of Python we strongly recommand to have 3.8 or higher**
 
 ## Our APIs
 
 To realise this project we have used two APIs :
 
 -   [Electric car stations](https://public.opendatasoft.com/explore/dataset/fichier-consolide-des-bornes-de-recharge-pour-vehicules-electriques-irve/table/?flg=fr)
--   [Thermic car stationns](https://data.opendatasoft.com/explore/dataset/stations-services-en-france%40datanova/api/?flg=fr&disjunctive.typeroute&disjunctive.commune&disjunctive.codepostal&disjunctive.services&disjunctive.carburants&disjunctive.activite)
+-   [Thermic car stations](https://data.opendatasoft.com/explore/dataset/stations-services-en-france%40datanova/api/?flg=fr&disjunctive.typeroute&disjunctive.commune&disjunctive.codepostal&disjunctive.services&disjunctive.carburants&disjunctive.activite)
 
 The first one gives us more than 20,000 entries and the second one around 10,000 which gives us a total of 30,000 data approximatively. <br/>
 
 ## Our ontology
 
-Our ontology is available [here](https://electric-car-park.mcheicki.com/ontology/ontology.owl).
-<a href="https://electric-car-park.mcheicki.com/ontology/ontology.owl" download>You can download it here.</a>
+Our ontology is available [here](https://car-station.mcheicki.com/ontology/ontology.owl).
+<a href="https://car-station.mcheicki.com/ontology/ontology.owl" download>You can download it here.</a>
 
 ## Structure
 
