@@ -1,6 +1,7 @@
 <p align="center">
     <img src='https://github.com/m-cheicki/WEBSEM_car_station/blob/main/static/logo.png' alt='logo'>
 </p>
+
 # Car station
 
 A4 ESILV - WEB DATAMINING AND SEMANTICS<br/>
