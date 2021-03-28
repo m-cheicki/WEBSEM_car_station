@@ -1,7 +1,7 @@
 :root {
 	--dark-gray: #202225;
 
-	--light-gray: #36393f;
+	--light-gray: #36393f80;
 
 	--dark: #f3f3f3;
 
@@ -340,4 +340,42 @@ input[type="text"]:focus {
 .leaflet-popup-content p {
 	margin: 0;
 	padding: 0;
+}
+
+/******************************************
+
+					LOADER
+
+ ******************************************/
+
+.loader {
+	visibility: hidden;
+	position: fixed;
+	top: 0;
+	right: 0;
+	left: 0;
+	bottom: 0;
+	background-color: var(--light-gray);
+	z-index: 1000;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.loading {
+	border: 16px solid var(--dark);
+	border-top: 16px solid var(--blue);
+	border-radius: 50%;
+	width: 120px;
+	height: 120px;
+	animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
 }

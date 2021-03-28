@@ -111,7 +111,7 @@
 			</div>
 		</div>
 		<div class="right-panel">
-			<form action="" method="POST">
+			<form action="" method="POST" id="form" name="form">
 				<div class="search-bar">
 					<button type="submit" id="submit">
 						<span class="material-icons">search</span>
@@ -160,6 +160,10 @@
 				</div>
 			</form>
 			<div id="map"></div>
+
+			<div id="loader" class="loader">
+				<div class="loading"></div>
+			</div>
 		</div>
 	</body>
 
@@ -168,7 +172,8 @@
 		var search = document.querySelector('#search');
 		var results = document.querySelector('#zipcodes');
 		var templateContent = document.querySelector('#resultstemplate').content;
-		var form = document.getElementById('submit');
+		var submit = document.getElementById('submit');
+		var loading = document.getElementById('loader');
 
 		search.addEventListener('click', function handler(event) {
 		    while (results.children.length) results.removeChild(results.firstChild);
@@ -182,7 +187,8 @@
 
 
 		function validateFormOnFilterChange(){
-			form.click();
+			submit.click();
+			loading.style.visibility = "visible";
 		}
 
 
