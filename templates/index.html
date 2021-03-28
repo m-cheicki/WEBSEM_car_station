@@ -113,7 +113,7 @@
 		<div class="right-panel">
 			<form action="" method="POST">
 				<div class="search-bar">
-					<button type="submit">
+					<button type="submit" id="submit">
 						<span class="material-icons">search</span>
 					</button>
 					<input
@@ -137,7 +137,7 @@
 
 				<div class="filters">
 					<div>Type of car :</div>
-					<div>
+					<div onchange="validateFormOnFilterChange()">
 						<input
 							type="checkbox"
 							name="type_of_car"
@@ -147,7 +147,7 @@
 						/>
 						<label for="thermic">Thermic</label>
 					</div>
-					<div>
+					<div onchange="validateFormOnFilterChange()">
 						<input
 							type="checkbox"
 							name="type_of_car"
@@ -168,6 +168,7 @@
 		var search = document.querySelector('#search');
 		var results = document.querySelector('#zipcodes');
 		var templateContent = document.querySelector('#resultstemplate').content;
+		var form = document.getElementById('submit');
 
 		search.addEventListener('click', function handler(event) {
 		    while (results.children.length) results.removeChild(results.firstChild);
@@ -178,6 +179,12 @@
 		    }, document.createDocumentFragment());
 		    results.appendChild(set);
 		});
+
+
+		function validateFormOnFilterChange(){
+			form.click();
+		}
+
 
 		var map = L.map('map');
 
