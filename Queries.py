@@ -1,6 +1,6 @@
 from enum import Enum
 
-PREFIX = "PREFIX st:<http://www.owl-ontologies.com/stations-velos.owl#>"
+PREFIX = "PREFIX st:<https://car-station.mcheicki.com/ontology/electric_ontology.owl#>"
 
 
 class Queries(Enum):
@@ -8,7 +8,7 @@ class Queries(Enum):
         ?name ?add ?zipcode ?lat ?lon ?isElectrical ?services ?city ?fuel ?isPayant ?numberPlugs
         WHERE {
             ?a st:station ?id .
-            ?id <http://www.owl-ontologies.com/stations-velos.owl#@nest> ?stationID .
+            ?id <https://car-station.mcheicki.com/ontology/electric_ontology.owl#@nest> ?stationID .
             ?stationID st:address ?add .
             ?stationID st:zipcode ?zipcode .
             ?stationID st:coordonnees ?lat .
@@ -38,7 +38,7 @@ class Queries(Enum):
     THERMIC_CARS_ONLY = PREFIX + """SELECT DISTINCT ?name ?add ?zipcode ?lat ?lon ?isElectrical ?services ?city ?fuel ?isPayant ?numberPlugs
         WHERE {
             ?a st:station ?id .
-            ?id <http://www.owl-ontologies.com/stations-velos.owl#@nest> ?stationID .
+            ?id <https://car-station.mcheicki.com/ontology/electric_ontology.owl#@nest> ?stationID .
             ?stationID st:address ?add .
             ?stationID st:zipcode ?zipcode .
             ?stationID st:city ?city .
@@ -61,7 +61,7 @@ class Queries(Enum):
     ELECTRIC_CARS_ONLY = PREFIX + """SELECT DISTINCT ?name ?add ?zipcode ?lat ?lon ?isElectrical ?services ?city ?fuel ?isPayant ?numberPlugs
         WHERE {
             ?a st:station ?id .
-            ?id <http://www.owl-ontologies.com/stations-velos.owl#@nest> ?stationID .
+            ?id <https://car-station.mcheicki.com/ontology/electric_ontology.owl#@nest> ?stationID .
             ?stationID st:address ?add .
             ?stationID st:zipcode ?zipcode .
             ?stationID st:coordonnees ?lat .
@@ -77,6 +77,6 @@ class Queries(Enum):
 
     ALL_ZIPCODES = PREFIX + """SELECT ?zipcode WHERE {
             ?a st:station ?id .
-            ?id <http://www.owl-ontologies.com/stations-velos.owl#@nest> ?stationID .
+            ?id <https://car-station.mcheicki.com/ontology/electric_ontology.owl#@nest> ?stationID .
             ?stationID st:zipcode ?zipcode .
         }"""

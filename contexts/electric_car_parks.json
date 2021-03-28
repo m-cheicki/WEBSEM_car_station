@@ -1,7 +1,7 @@
 {
     "@context" : {
-        "@vocab":"http://www.owl-ontologies.com/stations-velos.owl#",
-        "@base":"http://www.owl-ontologies.com/stations-velos.owl/",
+        "@vocab":"https://car-station.mcheicki.com/ontology/electric_ontology.owl#",
+        "@base":"https://car-station.mcheicki.com/ontology/electric_ontology.owl/",
         "nhits" : "total",
         "rows" : "nbquery",
         "start" : "start",
