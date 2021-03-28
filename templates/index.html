@@ -185,15 +185,16 @@
 		    results.appendChild(set);
 		});
 
-
+		/* Validate form when clicking in filters */
 		function validateFormOnFilterChange(){
 			submit.click();
 			loading.style.visibility = "visible";
 		}
 
-
+		/* Map */
 		var map = L.map('map');
 
+		/* Move camera with specific coodinates (results' coordinates) */
 		function mapWithSpecificCoordinates(lat, long){
 			map.panTo(new L.LatLng(lat, long), {animate: true, duration: 2});
 		}
@@ -220,6 +221,7 @@
 			accessToken: 'pk.eyJ1IjoibWNoZWlja2kiLCJhIjoiY2ttZ3VlYXFyMDB5eTJ4bXF3bmp6Zng2cyJ9.ZukfPhGAAp8xIx1Xk55VPg'
 		}).addTo(map);
 
+		/* Center map using user location */
 		map.locate({setView: true, watch: false, maxZoom: 13})
 			.on('locationfound', function(e){
 				mapWithSpecificCoordinates(e.latitude, e.longitude);
@@ -228,6 +230,7 @@
 				map.setView([48.856614, 2.3522219], 11);
 			});
 
+			/* Popup */
 			{% for record in data %}
 				{% if record['isElectrical'] %}
 					var text = "<div>"
@@ -246,6 +249,8 @@
 					text += "<p>Services : {{record['services']}}</p>"
 					text += "</div>"
 				{% endif %}
+
+				/* Markers */
 				var isElectrical = {{record['isElectrical']|int}}
 				var marker = L.marker([{{ record['lat'] }}, {{ record['lon'] }}],  { icon: (isElectrical? electric : fuel) }).addTo(map).bindPopup(text);
 			{% endfor %}

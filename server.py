@@ -9,6 +9,9 @@ from Queries import *
 app = Flask(__name__)
 minify(app=app, html=True, js=True, cssless=True)
 
+######################################
+# CALL APIs AND PARSING INTO JSON-LD
+######################################
 NUMBER_OF_RESULTS = 10000
 
 ELECTRIC_CARS_API_URL = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=fichier-consolide-des-bornes-de-recharge-pour-vehicules-electriques-irve&q=&facet=n_enseigne&facet=nbre_pdc&facet=puiss_max&facet=accessibilite&facet=nom_epci&facet=commune&facet=nom_reg&facet=nom_dep&rows=" + \
@@ -38,6 +41,9 @@ electric_cars_jsonLD3 = JSONLD(
 cars_jsonLD1 = JSONLD(CARS_CONTEXT, CARS_API_URL_PART1)
 cars_jsonLD2 = JSONLD(CARS_CONTEXT, CARS_API_URL_PART2)
 
+######################################
+# GENERATE GRAPH
+######################################
 g = Graph()
 g.parse(data=electric_cars_jsonLD1, format="json-ld")
 g.parse(data=electric_cars_jsonLD2, format="json-ld")
@@ -46,6 +52,7 @@ g.parse(data=cars_jsonLD1, format="json-ld")
 g.parse(data=cars_jsonLD2, format="json-ld")
 
 
+# Parse data to return to the view
 def parse_data(item):
     regex = re.match('^http', item.isElectrical.value)
     isElectrical = False if regex is None else True
@@ -65,6 +72,7 @@ def parse_data(item):
     return record
 
 
+# Check filters for searchbar : return the query
 def check_filters():
     if request.form.get('type_of_car'):
         checked = request.form.getlist('type_of_car')
