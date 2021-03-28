@@ -4,7 +4,7 @@ PREFIX = "PREFIX st:<http://www.owl-ontologies.com/stations-velos.owl#>"
 
 
 class Queries(Enum):
-    ALL_CARS = PREFIX + """SELECT
+    ALL_CARS = PREFIX + """SELECT DISTINCT
         ?name ?add ?zipcode ?lat ?lon ?isElectrical ?services ?city ?fuel ?isPayant ?numberPlugs
         WHERE {
             ?a st:station ?id .
