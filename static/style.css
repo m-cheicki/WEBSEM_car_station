@@ -164,6 +164,7 @@ div.left-panel {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	cursor: pointer;
 }
 
 .card:first-child {

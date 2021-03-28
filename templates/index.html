@@ -52,7 +52,10 @@
 			<div id="results">
 				<div>
 					{% if data|length > 0 %} {% for record in data %}
-					<div class="card">
+					<div
+						class="card"
+						onclick="mapWithSpecificCoordinates({{record['lat']}} , {{record['lon']}})"
+					>
 						<div>
 							{% if record['isElectrical'] %}
 							<img src="./static/electric.png" alt="" />
@@ -155,8 +158,12 @@
 		    results.appendChild(set);
 		});
 
+		var map = L.map('map');
 
-		var map = L.map('map').setView([48.856614, 2.3522219], 11);
+		function mapWithSpecificCoordinates(lat, long){
+			map.panTo(new L.LatLng(lat, long), {animate: true, duration: 2});
+		}
+
 		var electric = L.icon({
 			iconUrl: 'http://car-station.mcheicki.com/public/images/electric.png',
 			iconSize: [25, 25],
@@ -179,12 +186,12 @@
 			accessToken: 'pk.eyJ1IjoibWNoZWlja2kiLCJhIjoiY2ttZ3VlYXFyMDB5eTJ4bXF3bmp6Zng2cyJ9.ZukfPhGAAp8xIx1Xk55VPg'
 		}).addTo(map);
 
-		map.locate({setView: true, watch: true, maxZoom: 13})
+		map.locate({setView: true, watch: false, maxZoom: 13})
 			.on('locationfound', function(e){
-				// user lets us use his position
+				mapWithSpecificCoordinates(e.latitude, e.longitude);
 			})
 			.on('locationerror', function(e){
-				// user has blocked his position
+				mapWithSpecificCoordinates(48.856614, 2.3522219);
 			});
 
 			{% for record in data %}
