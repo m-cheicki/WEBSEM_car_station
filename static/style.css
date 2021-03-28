@@ -195,7 +195,7 @@ div.left-panel {
 	flex: 1;
 }
 
-.card div:nth-child(2) p:nth-last-child(-n + 2) {
+.card div:nth-child(2) p:nth-last-child(-n + 1) {
 	color: var(--blue);
 	font-size: 14px;
 }
