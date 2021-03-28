@@ -1,11 +1,14 @@
 import re
 from flask import Flask, render_template, request
+from flask_minify import minify
 from rdflib import Graph, Literal
 from rdflib.plugins.sparql import prepareQuery
 from JSONLD import *
 from Queries import *
 
 app = Flask(__name__)
+minify(app=app, html=True, js=True, cssless=True)
+
 NUMBER_OF_RESULTS = str(250)
 ELECTRIC_CARS_API_URL = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=fichier-consolide-des-bornes-de-recharge-pour-vehicules-electriques-irve&q=&facet=n_enseigne&facet=nbre_pdc&facet=puiss_max&facet=accessibilite&facet=nom_epci&facet=commune&facet=nom_reg&facet=nom_dep&rows=" + NUMBER_OF_RESULTS
 ELECTRIC_CARS_CONTEXT = r'contexts/electric_car_parks.json'
