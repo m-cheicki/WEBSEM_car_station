@@ -1,7 +1,7 @@
 {
     "@context" : {
-        "@vocab":"https://car-station.mcheicki.com/ontology/electric_ontology.owl#",
-        "@base":"https://car-station.mcheicki.com/ontology/electric_ontology.owl/",
+        "@vocab":"https://car-station.mcheicki.com/ontology/ontology.owl#",
+        "@base":"https://car-station.mcheicki.com/ontology/ontology.owl",
         "nhits" : "total",
         "rows" : "nbquery",
         "start" : "start",
