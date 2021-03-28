@@ -9,19 +9,41 @@ from Queries import *
 app = Flask(__name__)
 minify(app=app, html=True, js=True, cssless=True)
 
-NUMBER_OF_RESULTS = str(250)
-ELECTRIC_CARS_API_URL = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=fichier-consolide-des-bornes-de-recharge-pour-vehicules-electriques-irve&q=&facet=n_enseigne&facet=nbre_pdc&facet=puiss_max&facet=accessibilite&facet=nom_epci&facet=commune&facet=nom_reg&facet=nom_dep&rows=" + NUMBER_OF_RESULTS
+NUMBER_OF_RESULTS = 10000
+
+ELECTRIC_CARS_API_URL = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=fichier-consolide-des-bornes-de-recharge-pour-vehicules-electriques-irve&q=&facet=n_enseigne&facet=nbre_pdc&facet=puiss_max&facet=accessibilite&facet=nom_epci&facet=commune&facet=nom_reg&facet=nom_dep&rows=" + \
+    str(NUMBER_OF_RESULTS)
+
+ELECTRIC_CARS_API_URL_PART1 = f"{ELECTRIC_CARS_API_URL}&start=0"
+ELECTRIC_CARS_API_URL_PART2 = f"{ELECTRIC_CARS_API_URL}&start={NUMBER_OF_RESULTS}"
+ELECTRIC_CARS_API_URL_PART3 = f"{ELECTRIC_CARS_API_URL}&start={NUMBER_OF_RESULTS*2}"
+
 ELECTRIC_CARS_CONTEXT = r'contexts/electric_car_parks.json'
 
-CARS_API_URL = "https://data.opendatasoft.com/api/records/1.0/search/?dataset=stations-services-en-france%40datanova&q=&facet=typeroute&facet=commune&facet=codepostal&facet=services&facet=carburants&facet=activite&rows=" + NUMBER_OF_RESULTS
+CARS_API_URL = "https://data.opendatasoft.com/api/records/1.0/search/?dataset=stations-services-en-france%40datanova&q=&facet=typeroute&facet=commune&facet=codepostal&facet=services&facet=carburants&facet=activite&rows=" + \
+    str(NUMBER_OF_RESULTS)
+
+CARS_API_URL_PART1 = f"{CARS_API_URL}&start=0"
+CARS_API_URL_PART2 = f"{CARS_API_URL}&start={NUMBER_OF_RESULTS}"
+
 CARS_CONTEXT = r'contexts/car_parks.json'
 
-electric_cars_jsonLD = JSONLD(ELECTRIC_CARS_CONTEXT, ELECTRIC_CARS_API_URL)
-cars_jsonLD = JSONLD(CARS_CONTEXT, CARS_API_URL)
+electric_cars_jsonLD1 = JSONLD(
+    ELECTRIC_CARS_CONTEXT, ELECTRIC_CARS_API_URL_PART1)
+electric_cars_jsonLD2 = JSONLD(
+    ELECTRIC_CARS_CONTEXT, ELECTRIC_CARS_API_URL_PART2)
+electric_cars_jsonLD3 = JSONLD(
+    ELECTRIC_CARS_CONTEXT, ELECTRIC_CARS_API_URL_PART3)
+
+cars_jsonLD1 = JSONLD(CARS_CONTEXT, CARS_API_URL_PART1)
+cars_jsonLD2 = JSONLD(CARS_CONTEXT, CARS_API_URL_PART2)
 
 g = Graph()
-g.parse(data=electric_cars_jsonLD, format="json-ld")
-g.parse(data=cars_jsonLD, format="json-ld")
+g.parse(data=electric_cars_jsonLD1, format="json-ld")
+g.parse(data=electric_cars_jsonLD2, format="json-ld")
+g.parse(data=electric_cars_jsonLD3, format="json-ld")
+g.parse(data=cars_jsonLD1, format="json-ld")
+g.parse(data=cars_jsonLD2, format="json-ld")
 
 
 def parse_data(item):
@@ -97,3 +119,7 @@ def index():
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
+
+
+if __name__ == '__main__':
+    app.run(port="5000", debug=True)

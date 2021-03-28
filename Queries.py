@@ -31,9 +31,9 @@ class Queries(Enum):
             }
             OPTIONAL{
                 ?stationID st:numberPlugs ?numberPlugs .
-            }
+            } 
             FILTER(?lat > ?lon)
-        }"""
+        } LIMIT 500"""
 
     THERMIC_CARS_ONLY = PREFIX + """SELECT DISTINCT ?name ?add ?zipcode ?lat ?lon ?isElectrical ?services ?city ?fuel ?isPayant ?numberPlugs
         WHERE {
@@ -55,7 +55,7 @@ class Queries(Enum):
                 ?stationID st:services ?services .
             }
             FILTER(?lat > ?lon)
-        }
+        } LIMIT 100
     """
 
     ELECTRIC_CARS_ONLY = PREFIX + """SELECT DISTINCT ?name ?add ?zipcode ?lat ?lon ?isElectrical ?services ?city ?fuel ?isPayant ?numberPlugs
@@ -72,10 +72,10 @@ class Queries(Enum):
             ?stationID st:name ?name .
 
             FILTER(?lat > ?lon)
-        }
+        } LIMIT 500
     """
 
-    ALL_ZIPCODES = PREFIX + """SELECT ?zipcode WHERE {
+    ALL_ZIPCODES = PREFIX + """SELECT DISTINCT ?zipcode WHERE {
             ?a st:station ?id .
             ?id <https://car-station.mcheicki.com/ontology/electric_ontology.owl#@nest> ?stationID .
             ?stationID st:zipcode ?zipcode .
