@@ -1,11 +1,12 @@
 <p align="center">
     <img src='https://github.com/m-cheicki/WEBSEM_car_station/blob/main/static/logo.png' alt='logo'>
-    <h1 style="text-align: center">Car station</h1>
-    <p style="text-align: center">
-        A4 ESILV - WEB DATAMINING AND SEMANTICS<br/>
-        Amar Merwan CHELOUAH - Kévin CELIE - Mariyam CHEICK ISMAIL 
-    </p>
 </p>
+# Car station
+
+A4 ESILV - WEB DATAMINING AND SEMANTICS<br/>
+Amar Merwan CHELOUAH - Kévin CELIE - Mariyam CHEICK ISMAIL 
+
+
 
 ---
 
