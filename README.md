@@ -5,9 +5,7 @@
 # Car station
 
 A4 ESILV - WEB DATAMINING AND SEMANTICS<br/>
-Amar Merwan CHELOUAH - Kévin CELIE - Mariyam CHEICK ISMAIL 
-
-
+Amar Merwan CHELOUAH - Kévin CELIE - Mariyam CHEICK ISMAIL
 
 ---
 
@@ -23,7 +21,7 @@ You can also filter by type of car: either thermic or electric. And also, you ca
 
 ### Demonstration video
 
-<a href="https://car-station.mcheicki.com/public/DEMO_DIA4_GROUP5_CELIE_CHELOUAH_CHEICKISMAIL_WEBSEM.mp4">Click here to watch the video</a>
+<a href="https://car-station.mcheicki.com/public/DEMO_DIA2_GROUP5_CELIE_CHELOUAH_CHEICKISMAIL_WEBSEM.mp4">Click here to watch the video</a>
 
 ## How to install
 
