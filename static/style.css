@@ -9,7 +9,7 @@
 
 	--blue: #4285f4;
 
-	--light-blue: #0a91ab40;
+	--light-blue: #005f7140;
 
 	--yellow: #fbbc05;
 }
@@ -164,7 +164,6 @@ div.left-panel {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	cursor: pointer;
 }
 
 .card:first-child {
@@ -172,7 +171,8 @@ div.left-panel {
 }
 
 .card:hover {
-	background: rgba(255, 255, 255, 0.2);
+	background: #fefefe;
+	cursor: pointer;
 }
 
 .card strong {

@@ -56,11 +56,29 @@
 						class="card"
 						onclick="mapWithSpecificCoordinates({{record['lat']}} , {{record['lon']}})"
 					>
-						<div>
+						<div
+							style="
+								width: 25%;
+								margin-right: 8px;
+								font-weight: bold;
+							"
+						>
 							{% if record['isElectrical'] %}
-							<img src="./static/electric.png" alt="" />
+							<div>
+								<img src="./static/electric.png" alt="" />
+							</div>
+							<div>
+								<p>Plugs : <br />{{record['numberPlugs']}}</p>
+							</div>
 							{% else %}
-							<img src="./static/fuel.png" alt="" />
+							<div>
+								<img src="./static/fuel.png" alt="" />
+							</div>
+							<div>
+								<p style="color: black">
+									Fuel : <br />{{record['fuel']}}
+								</p>
+							</div>
 							{% endif %}
 						</div>
 						<div>
@@ -68,17 +86,20 @@
 							<p>{{record['address']}}</p>
 
 							{% if record['isElectrical'] %}
-							<p>Number of plugs : {{record['numberPlugs']}}</p>
 							<p style="text-transform: capitalize">
 								{{record['paying']}}
 							</p>
 
 							{% else %}
 							<p>{{record['zipcode']}} {{record['city']}}</p>
-							<p>Fuel : {{record['fuel']}}</p>
-							<p>Services : {{record['services']}}</p>
 
-							{% endif %}
+							{% if record['services'] %}
+							<p>
+								Services : {{record['services'].split(',')[:3]}}
+								{% if record['services'].split(',')|length > 3
+								%} + more {% endif%}
+							</p>
+							{% endif %} {% endif %}
 						</div>
 					</div>
 					{% endfor %} {% else %}
