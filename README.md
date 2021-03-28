@@ -74,3 +74,5 @@ Our ontology is available [here](https://car-station.mcheicki.com/ontology/ontol
 -   `JSONLD.py` is a file that parse our API into a JSON-LD using its context defined in the context folder
 -   `Queries.py` is a file with our SPARQL queries
 -   `static` and `templates` are folder used by Flask
+
+**All images and icons are made with ❤ by us**
