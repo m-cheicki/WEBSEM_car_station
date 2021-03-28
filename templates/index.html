@@ -219,7 +219,7 @@
 				mapWithSpecificCoordinates(e.latitude, e.longitude);
 			})
 			.on('locationerror', function(e){
-				mapWithSpecificCoordinates(48.856614, 2.3522219);
+				map.setView([48.856614, 2.3522219], 11);
 			});
 
 			{% for record in data %}
